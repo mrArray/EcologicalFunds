@@ -66,7 +66,7 @@ class Header extends Component {
       {/*begin::Left*/}
       <div className="d-none d-lg-flex align-items-center mr-3">
         {/*begin::Logo*/}
-        <Link to="/dashbord" className="mr-20">
+        <Link to="/dashboard" className="mr-20">
           <img alt="Logo" src="./assets/dist/assets/media/svg/illustrations/ecooo.png" className="max-h-35px" />
         </Link>
         {/*end::Logo*/}
