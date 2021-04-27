@@ -118,8 +118,31 @@ export default class AllProjects extends Component {
 
   }
 
-  //this is my onclick event to pass project ID    onClick={ () => this.toggleEditing.bind(this, valueA, valueB) }
+  DeleteProject(project) {
+    
+    const username = 'admin'
+    const password = 'Pass@1234'
+    const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+    const PIds=project.pk;
+    axios.delete(`https://ecological.chinikiguard.com/projects/api/delete/${PIds}/`,
+      {
+        headers:
+        {
+          'Authorization': `Basic ${token}`,
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+          'Access-Control-Allow-Credentials': true
+        },
+      })
+      .then(res => {
+       
+        console.log(res);
+        console.log(res.data);
+        window.location = "/allprojects"
 
+      })
+
+  }
   EditProject(project) {
     localStorage.setItem("singleProjects", JSON.stringify(project));
     // console.log(project.pk)
@@ -127,7 +150,7 @@ export default class AllProjects extends Component {
     const username = 'admin'
     const password = 'Pass@1234'
     const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
-    axios.get("https://ecological.chinikiguard.com/projects/api/tasks/list/",
+    axios.get(`https://ecological.chinikiguard.com/projects/api/tasks/list/?for_user=true&project=${project.pk}`,
       {
         headers:
         {
@@ -136,10 +159,9 @@ export default class AllProjects extends Component {
           'Access-Control-Allow-Methods': 'GET,POST,HEAD,OPTIONS',
           'Access-Control-Allow-Credentials': true
         },
-        params: {
-
-          project: `${project.pk}`
-        }
+        // params: {
+        //   project: `${project}`
+        // }
 
       })
       .then(res => {
@@ -372,7 +394,7 @@ export default class AllProjects extends Component {
                                   </div>
                                   <div className="d-flex align-items-center">
                                     <span className="font-weight-bold mr-4">Due</span>
-                                    <span className="btn btn-light-danger btn-sm font-weight-bold btn-upper btn-text">{project.due_date}</span>
+                                    <span className="btn btn-light-success btn-sm font-weight-bold btn-upper btn-text">{project.due_date}</span>
                                   </div>
                                 </div>
                                 {/*end::Data*/}
@@ -391,10 +413,33 @@ export default class AllProjects extends Component {
                                   <span className="btn btn-light-primary btn-sm font-weight-bold btn-upper btn-text">{project.status}</span>
                                 </div>
                               </div>
+                             
+                              <div className="d-flex">
+                              
+                              <p>
+                              <div className="d-flex mr-7">
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                               <Link to="/EditProject"
                                 className="btn btn-block btn-sm btn-light-primary font-weight-bolder text-uppercase py-4"
                                 onClick={this.EditProject.bind(this, project)}
                               >Edit Project</Link>
+                              </div>
+                              </p>
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                               <p>
+                              <div className="d-flex  mr-7">
+                              <Link 
+                                className="btn btn-block btn-sm btn-light-danger font-weight-bolder text-uppercase py-4"
+                                onClick={this.DeleteProject.bind(this, project)}
+                              >Delete Project</Link>
+                              
+                              </div>
+                              </p>
+                              </div>
                               {/*end::Body*/}
                             </div>
                           </div>
