@@ -130,9 +130,9 @@ export default class AllProjects extends Component {
         {
           'Authorization': `Basic ${token}`,
           'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
-          'Access-Control-Allow-Credentials': true
-        },
+          'Access-Control-Allow-Methods': 'DELETE, OPTIONS',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'application/json' },
       })
       .then(res => {
        

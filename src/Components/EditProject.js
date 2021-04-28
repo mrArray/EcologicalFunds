@@ -162,6 +162,7 @@ export default class EditProject extends Component {
                                 <div className="d-flex flex-column-fluid">
                                     {/*begin::Container*/}
                                     <div className="container">
+                                    <Link  class="btn btn-light-primary font-weight-bolder btn-sm" to="/allprojects" >Back</Link>
 
                                         <div className="card card-custom gutter-b">
                                             <div className="card-body">
