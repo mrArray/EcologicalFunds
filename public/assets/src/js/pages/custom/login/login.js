@@ -107,7 +107,7 @@ var KTLoginGeneral = function() {
 					email: {
                         validators: {
 							notEmpty: {
-								message: 'Email address is required'
+								message: 'Email This field Required'
 							},
                             emailAddress: {
 								message: 'The value is not a valid email address'
@@ -196,7 +196,7 @@ var KTLoginGeneral = function() {
 					email: {
 						validators: {
 							notEmpty: {
-								message: 'Email address is required'
+								message: 'Email This field Required'
 							},
                             emailAddress: {
 								message: 'The value is not a valid email address'

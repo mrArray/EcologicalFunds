@@ -151,7 +151,7 @@ var KTWizard2 = function () {
 					address1: {
 						validators: {
 							notEmpty: {
-								message: 'Address is required'
+								message: 'This field Required'
 							}
 						}
 					},
@@ -241,7 +241,7 @@ var KTWizard2 = function () {
 					locaddress1: {
 						validators: {
 							notEmpty: {
-								message: 'Address is required'
+								message: 'This field Required'
 							}
 						}
 					},

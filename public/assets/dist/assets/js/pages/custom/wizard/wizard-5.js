@@ -141,14 +141,14 @@ var KTWizard5 = function () {
 					address1: {
 						validators: {
 							notEmpty: {
-								message: 'Address is required'
+								message: 'This field Required'
 							}
 						}
 					},
 					address2: {
 						validators: {
 							notEmpty: {
-								message: 'Address is required'
+								message: 'This field Required'
 							}
 						}
 					},

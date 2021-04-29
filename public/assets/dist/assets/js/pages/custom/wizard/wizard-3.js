@@ -99,7 +99,7 @@ var KTWizard3 = function () {
 					address1: {
 						validators: {
 							notEmpty: {
-								message: 'Address is required'
+								message: 'This field Required'
 							}
 						}
 					},
@@ -253,7 +253,7 @@ var KTWizard3 = function () {
 					locaddress1: {
 						validators: {
 							notEmpty: {
-								message: 'Address is required'
+								message: 'This field Required'
 							}
 						}
 					},

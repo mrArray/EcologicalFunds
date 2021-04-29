@@ -90,6 +90,7 @@ export default class RegisterProject extends Component {
       startDate: "",
       dueDate: "",
       loading: false,
+      meloading: false,
       show: false,
       message: ""
     };
@@ -114,6 +115,7 @@ export default class RegisterProject extends Component {
 
 
     document.body.appendChild(script);
+
   }
 
 
@@ -194,7 +196,8 @@ export default class RegisterProject extends Component {
     this.setState({
       message: "",
       successful: false,
-      loading:true
+      loading:true,
+      meloading: true
 
     });
 
@@ -213,7 +216,8 @@ export default class RegisterProject extends Component {
           this.setState({
             message: response.data.detail,
             successful: true,
-            loading:true
+            loading:false,
+            meloading:false
           });
           window.location = "/AllProjects"
         },
@@ -229,7 +233,8 @@ export default class RegisterProject extends Component {
           this.setState({
             successful: false,
             message: resMessage,
-            loading: true
+            loading: false,
+            meloading:false
           });
         }
       );
@@ -243,16 +248,6 @@ export default class RegisterProject extends Component {
     }
 
 
-
-    const { loading } = this.state;
-
-    // if (this.state.redirectToReferrer) {
-    //     return (<Redirect to={'/dashboard'} />)
-    // }
-
-    // if (sessionStorage.getItem('token')) {
-    //     return (<Redirect to={'/dashboard'} />)
-    // }
 
     return (
 
@@ -360,38 +355,40 @@ export default class RegisterProject extends Component {
                                       <h3 className="mb-10 font-weight-bold text-dark">Setup Your Project Details</h3>
                                       {/*begin::Input*/}
                                       <div className="form-group">
-                                        <label>Project Name</label>
+                                        <label>Project Name <span class="text-danger">*</span></label>
                                         <Input type="text" className="form-control form-control-solid form-control-lg"
                                           value={this.state.title}
                                           onChange={this.onChangeTitle}
                                           validations={[required]}
-                                          name="projectname"
+                                          name="address1"
                                           placeholder="Project Name" />
                                         <span className="form-text text-muted">Please enter Project Name.</span>
                                       </div>
                                       {/*end::Input*/}
                                       {/*begin::Input*/}
                                       <div className="form-group">
-                                        <label>Project Description</label>
+                                        <label>Project Description <span class="text-danger">*</span></label>
                                         <Textarea type="text" className="form-control form-control-solid form-control-lg"
                                           value={this.state.description}
                                           onChange={this.onChangeDescription}
                                           validations={[required]}
-                                          name="projectdescription"
-                                          placeholder="Project Name" />
+                                          placeholder="Project Name" 
+                                          name="address1"
+
+                                          />
                                         <span className="form-text text-muted">limit 50</span>
                                       </div>
                                       {/*end::Input*/}
 
                                       <div className="form-group">
-                                        <label>Status</label>
-                                        <select name="country" className="form-control"
+                                        <label>Status <span class="text-danger">*</span></label>
+                                        <select name="address1" className="form-control"
                                           value={this.state.status}
                                           onChange={this.onChangeStatus}
                                           validations={[required]}
-                                          name="projectstatus"
+
                                         >
-                                          <option value>Select</option>
+                                          <option value="">Select</option>
                                           <option value="open">Open</option>
                                           <option value="inprogress">In Progress</option>
                                           <option value="completed">Completed</option>
@@ -404,12 +401,14 @@ export default class RegisterProject extends Component {
                                         <div className="col-xl-12">
                                           {/*begin::Select*/}
                                           <div className="form-group">
-                                            <label>Project Location</label>
+                                            <label>Project Location <span class="text-danger">*</span></label>
                                             <Textarea type="text" className="form-control form-control-solid form-control-lg"
                                               value={this.state.location}
                                               onChange={this.onChangeLocation}
                                               validations={[required]}
-                                              name="projectlocation" />
+                                              name="address1"
+
+                                              />
                                             <span className="form-text text-muted">limit 50</span>
                                           </div>
                                           {/*end::Select*/}
@@ -426,28 +425,30 @@ export default class RegisterProject extends Component {
                                       {/* <h4 className="mb-10 font-weight-bold text-dark">Select your Services</h4> */}
                                       {/*begin::Select*/}
                                       <div className="form-group">
-                                        <div className="form-group">
-                                          <label>Start Date</label>
-                                          <Input type="text" className="form-control form-control-solid form-control-lg"
+                                       
+                                       <div className="form-group">
+                                          <label>Start Date <span class="text-danger">*</span></label>
+                                          <Input type="date" className="form-control form-control-solid form-control-lg"
                                             value={this.state.start_date}
                                             onChange={this.onChangeStartDate}
                                             validations={[required]}
-                                            name="startdate"
                                             placeholder="YYYY-MM-DD" />
                                           <span className="form-text text-muted">Start date</span>
                                         </div>
+                                   
+
+                                     
                                       </div>
                                       {/*end::Select*/}
                                       {/*begin::Select*/}
                                       <div className="form-group">
                                         <div className="form-group">
-                                          <label>Due Date</label>
-                                          <Input type="text" className="form-control form-control-solid form-control-lg"
+                                          <label>Due Date <span class="text-danger">*</span></label>
+                                          <Input type="date" format="YYYY-MM-DD" className="form-control form-control-solid form-control-lg"
                                             value={this.state.due_date}
                                             onChange={this.onChangeDueDate}
                                             validations={[required]}
-                                            name="startdate"
-                                            placeholder="YYYY-MM-DD" />
+                                            />
                                           <span className="form-text text-muted">Due date</span>
                                         </div>
                                       </div>
@@ -485,8 +486,20 @@ export default class RegisterProject extends Component {
 
                                     {/*end::Wizard Step 5*/}
                                     {/*begin::Wizard Step 5*/}
+<center>
+                                    <button id="kt_login_singin_form_submit_button"
+                                          className="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-3"
+                                          data-wizard-type="step-content"
+                                          disabled={this.state.meloading}
 
-
+    
+                                        >
+                                          {this.state.meloading && (
+                                                    <center><Spinner animation="border" variant="white" /></center>
+                                                    )}
+                                          <span>submit</span>
+                                        </button>
+</center>
                                   </div>
                                 )}  
                                 <center> 
@@ -517,18 +530,8 @@ export default class RegisterProject extends Component {
                                     <button type="button" className="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Next</button>
                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                       
-                                          <button id="kt_login_singin_form_submit_button"
-                                          className="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-3"
-                                          data-wizard-type="step-content"
-                                          enabled={this.state.loading}
-    
-                                        >
-                                          {this.state.loading && (
-                                                    <center><Spinner animation="border" variant="white" /></center>
-                                                    )}
-                                          <span>submit</span>
-                                        </button>
-                                          
+                                       
+      
 
                                     {/* <Modal show={this.state.show} onHide={this.handleClose}>
                                       <Modal.Header closeButton>
