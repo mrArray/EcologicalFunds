@@ -432,6 +432,7 @@ export default class RegisterProject extends Component {
                                             value={this.state.start_date}
                                             onChange={this.onChangeStartDate}
                                             validations={[required]}
+                                            required
                                             placeholder="YYYY-MM-DD" />
                                           <span className="form-text text-muted">Start date</span>
                                         </div>
@@ -448,6 +449,7 @@ export default class RegisterProject extends Component {
                                             value={this.state.due_date}
                                             onChange={this.onChangeDueDate}
                                             validations={[required]}
+                                            required
                                           />
                                           <span className="form-text text-muted">Due date</span>
                                         </div>

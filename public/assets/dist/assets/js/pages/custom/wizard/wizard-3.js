@@ -113,7 +113,7 @@ var KTWizard3 = function () {
 					city: {
 						validators: {
 							notEmpty: {
-								message: 'City is required'
+								message: 'This field Required'
 							}
 						}
 					},
@@ -267,7 +267,7 @@ var KTWizard3 = function () {
 					loccity: {
 						validators: {
 							notEmpty: {
-								message: 'City is required'
+								message: 'This field Required'
 							}
 						}
 					},

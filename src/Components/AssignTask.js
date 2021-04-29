@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
+import Textarea from "react-validation/build/textarea"
+
 // import AuthService from "../services/auth.service";
 // import { PostData } from "./PostData";
 import { Redirect, Switch } from 'react-router-dom';
@@ -61,11 +63,7 @@ export default class AssignTask extends Component {
 
     script.src = "./assets/dist/assets/js/pages/custom/wizard/wizard-3.js";
     script.async = true;
-
-
     document.body.appendChild(script);
-
-
   }
   componentWillMount() {
 
@@ -268,7 +266,7 @@ export default class AssignTask extends Component {
                           <div className="row justify-content-center py-10 px-8 py-lg-12 px-lg-10">
                             <div className="col-xl-12 col-xxl-7">
                               {/*begin: Wizard Form*/}
-                              <Form onSubmit={this.handleRegisterTask} ref={c => { this.form = c; }} className="form" id="kt_form">
+                              <Form onSubmit={this.handleRegisterTask} ref={c => { this.form = c; }}   className="form" id="kt_form">
                                 {!this.state.successful && (
                                   <div>
                                     {/*begin: Wizard Step 1*/}
@@ -277,7 +275,9 @@ export default class AssignTask extends Component {
                                       {/*begin::Input*/}
                                       <div className="form-group">
                                         <label>Projects</label>
-                                        <select name="address1" className="form-control"
+                                        <select
+                                         name="address1"
+                                         className="form-control"
                                           value={this.state.project}
                                           onChange={this.onChangeProject}
                                           validations={[required]}
@@ -293,7 +293,9 @@ export default class AssignTask extends Component {
                                       {/*end::Input*/}
                                       <div className="form-group">
                                         <label>Status</label>
-                                        <select name="address1" className="form-control"
+                                        <select 
+                                        name="address1"
+                                         className="form-control"
                                           value={this.state.status}
                                           onChange={this.onChangeStatus}
                                           validations={[required]}
@@ -308,7 +310,10 @@ export default class AssignTask extends Component {
                                       {/*begin::Input*/}
                                       <div className="form-group">
                                         <label>Task Name</label>
-                                        <input type="text" className="form-control" name="address1"
+                                        <Input
+                                         type="text"
+                                         className="form-control"
+                                         name="address1"
                                           value={this.state.title}
                                           onChange={this.onChangeTitle}
                                           validations={[required]}
@@ -321,7 +326,9 @@ export default class AssignTask extends Component {
                                           {/*begin::Input*/}
                                           <div className="form-group">
                                             <label>Task Description</label>
-                                            <textarea type="text" className="form-control" name="address1"
+                                            <Textarea 
+                                            type="text" className="form-control" 
+                                            name="address1"
                                               value={this.state.description}
                                               onChange={this.onChangeDescription}
                                               validations={[required]}
@@ -341,11 +348,12 @@ export default class AssignTask extends Component {
                                       {/*begin::Input*/}
                                       <div className="form-group">
                                         <label>Assign To</label>
-                                        <select name="country" className="form-control"
+                                        <select 
+                                        name="address1" 
+                                        className="form-control"
                                           value={this.state.assigned_to}
                                           onChange={this.onChangeAssignedTo}
                                           validations={[required]}
-                                          // name="address1"
                                         >
                                           
                                           <option value>Select</option>
@@ -361,48 +369,48 @@ export default class AssignTask extends Component {
                                       {/*begin::Input*/}
                                       <div className="form-group">
                                         <label>Task Location</label>
-                                        <input type="text" className="form-control"
+                                        <Textarea type="text" 
+                                        className="form-control"
                                           value={this.state.location}
                                           onChange={this.onChangeLocation}
                                           validations={[required]}
-                                          placeholder="task location" />
-                                        <span className="form-text text-muted">Please enter Task Description.</span>
+                                          placeholder="task location"
+                  />
+                                        <span className="form-text text-muted">Please enter Task Location.</span>
                                       </div>
                                       {/*end::Input*/}
 
                                       {/*begin::Input*/}
                                       <div className="form-group">
                                         <label>Task Start Date</label>
-                                        <input type="date"  format="YYYY-MM-DD" className="form-control"
+                                        <input type="date"
+                                          format="YYYY-MM-DD" 
+                                          className="form-control"
                                           value={this.state.start_date}
                                           onChange={this.onChangeStartDate}
                                           validations={[required]}
-                                           placeholder="YYYY-MM-DD" />
+                                           placeholder="YYYY-MM-DD"
+                                          />
                                         <span className="form-text text-muted">Please enter Task start date.</span>
                                       </div>
                                       {/*end::Input*/}
                                       <div className="form-group">
                                         <label>Task Due Date</label>
-                                        <input type="date" format="YYYY-MM-DD" className="form-control" 
+                                        <input type="date" 
+                                        format="YYYY-MM-DD" 
+                                        className="form-control" 
                                           value={this.state.due_date}
                                           onChange={this.onChangeDueDate}
                                           validations={[required]}
                                           placeholder="YYYY-MM-DD" />
                                         <span className="form-text text-muted">Please enter Task Due Date.</span>
                                       </div>
-
                                     </div>
-
-
                                     {/*end::Wizard Step 5*/}
                                     {/*begin::Wizard Step 5*/}
-
-
                                   </div>
                                 )}
                                 <center>
-
-
                                   {this.state.message && (
 
                                     <div className="pb-5" >

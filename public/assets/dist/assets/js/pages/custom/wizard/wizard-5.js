@@ -162,7 +162,7 @@ var KTWizard5 = function () {
 					city: {
 						validators: {
 							notEmpty: {
-								message: 'City is required'
+								message: 'This field Required'
 							}
 						}
 					},
