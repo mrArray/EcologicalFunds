@@ -196,7 +196,7 @@ export default class RegisterProject extends Component {
     this.setState({
       message: "",
       successful: false,
-      loading:true,
+      loading: true,
       meloading: true
 
     });
@@ -216,8 +216,8 @@ export default class RegisterProject extends Component {
           this.setState({
             message: response.data.detail,
             successful: true,
-            loading:false,
-            meloading:false
+            loading: false,
+            meloading: false
           });
           window.location = "/AllProjects"
         },
@@ -234,7 +234,7 @@ export default class RegisterProject extends Component {
             successful: false,
             message: resMessage,
             loading: false,
-            meloading:false
+            meloading: false
           });
         }
       );
@@ -344,7 +344,7 @@ export default class RegisterProject extends Component {
                           {/*begin::Wizard Body*/}
                           <div className="row justify-content-center my-10 px-8 my-lg-15 px-lg-10">
                             <div className="col-xl-12 col-xxl-7">
-                              {/*begin::Wizard Form*/}                      
+                              {/*begin::Wizard Form*/}
 
                               <Form onSubmit={this.handleRegisterProject} ref={c => { this.form = c; }} className="form" id="kt_form">
 
@@ -372,10 +372,10 @@ export default class RegisterProject extends Component {
                                           value={this.state.description}
                                           onChange={this.onChangeDescription}
                                           validations={[required]}
-                                          placeholder="Project Name" 
+                                          placeholder="Project Name"
                                           name="address1"
 
-                                          />
+                                        />
                                         <span className="form-text text-muted">limit 50</span>
                                       </div>
                                       {/*end::Input*/}
@@ -408,7 +408,7 @@ export default class RegisterProject extends Component {
                                               validations={[required]}
                                               name="address1"
 
-                                              />
+                                            />
                                             <span className="form-text text-muted">limit 50</span>
                                           </div>
                                           {/*end::Select*/}
@@ -425,8 +425,8 @@ export default class RegisterProject extends Component {
                                       {/* <h4 className="mb-10 font-weight-bold text-dark">Select your Services</h4> */}
                                       {/*begin::Select*/}
                                       <div className="form-group">
-                                       
-                                       <div className="form-group">
+
+                                        <div className="form-group">
                                           <label>Start Date <span class="text-danger">*</span></label>
                                           <Input type="date" className="form-control form-control-solid form-control-lg"
                                             value={this.state.start_date}
@@ -435,9 +435,9 @@ export default class RegisterProject extends Component {
                                             placeholder="YYYY-MM-DD" />
                                           <span className="form-text text-muted">Start date</span>
                                         </div>
-                                   
 
-                                     
+
+
                                       </div>
                                       {/*end::Select*/}
                                       {/*begin::Select*/}
@@ -448,7 +448,7 @@ export default class RegisterProject extends Component {
                                             value={this.state.due_date}
                                             onChange={this.onChangeDueDate}
                                             validations={[required]}
-                                            />
+                                          />
                                           <span className="form-text text-muted">Due date</span>
                                         </div>
                                       </div>
@@ -486,40 +486,40 @@ export default class RegisterProject extends Component {
 
                                     {/*end::Wizard Step 5*/}
                                     {/*begin::Wizard Step 5*/}
-<center>
-                                    <button id="kt_login_singin_form_submit_button"
-                                          className="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-3"
-                                          data-wizard-type="step-content"
-                                          disabled={this.state.meloading}
+                                    <center>
+                                      <button id="kt_login_singin_form_submit_button"
+                                        className="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-3"
+                                        data-wizard-type="step-content"
+                                        disabled={this.state.meloading}
 
-    
-                                        >
-                                          {this.state.meloading && (
-                                                    <center><Spinner animation="border" variant="white" /></center>
-                                                    )}
-                                          <span>submit</span>
-                                        </button>
-</center>
+
+                                      >
+                                        {this.state.meloading && (
+                                          <center><Spinner animation="border" variant="white" /></center>
+                                        )}
+                                        <span>submit</span>
+                                      </button>
+                                    </center>
                                   </div>
-                                )}  
-                                <center> 
-       
-                                  
+                                )}
+                                <center>
+
+
                                   {this.state.message && (
-                                  
-                                  <div className="pb-5" >
-                                    <div
-                                      className={
-                                        this.state.successful
-                                          ? "alert alert-custom alert-outline-success fade show mb-5"
-                                          : "alert alert-custom alert-outline-danger fade show mb-5"
-                                      }
-                                      role="alert"
-                                    >
-                                      {this.state.message}
+
+                                    <div className="pb-5" >
+                                      <div
+                                        className={
+                                          this.state.successful
+                                            ? "alert alert-custom alert-outline-success fade show mb-5"
+                                            : "alert alert-custom alert-outline-danger fade show mb-5"
+                                        }
+                                        role="alert"
+                                      >
+                                        {this.state.message}
+                                      </div>
                                     </div>
-                                  </div>
-                                )}</center>
+                                  )}</center>
 
                                 <div className="d-flex justify-content-between border-top mt-5 pt-10">
                                   <div className="mr-2">
@@ -529,9 +529,9 @@ export default class RegisterProject extends Component {
 
                                     <button type="button" className="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Next</button>
                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                      
-                                       
-      
+
+
+
 
                                     {/* <Modal show={this.state.show} onHide={this.handleClose}>
                                       <Modal.Header closeButton>

@@ -63,66 +63,65 @@ export default class AllTasks extends Component {
         this.setState({ allTazz: res.data, myloading: false });
       })
 
-       const data =
+    const data =
       [
         {
-            "task": 'loading...',
-            "task_name": "loading...",
-            "pk": 'loading...',
-            "title": "loading...",
-            "image": "loading...",
-            "version": 'loading...',
-            "created": "loading...",
-            "updated": "loading..."
-          },
+          "task": 'loading...',
+          "task_name": "loading...",
+          "pk": 'loading...',
+          "title": "loading...",
+          "image": "loading...",
+          "version": 'loading...',
+          "created": "loading...",
+          "updated": "loading..."
+        },
         {
-            "task": 'loading...',
-            "task_name": "loading...",
-            "pk": 'loading...',
-            "title": "loading...",
-            "image": "loading...",
-            "version": 'loading...',
-            "created": "loading...",
-            "updated": "loading..."
-          }, {
-            "task": 'loading...',
-            "task_name": "loading...",
-            "pk": 'loading...',
-            "title": "loading...",
-            "image": "loading...",
-            "version": 'loading...',
-            "created": "loading...",
-            "updated": "loading..."
-          },
+          "task": 'loading...',
+          "task_name": "loading...",
+          "pk": 'loading...',
+          "title": "loading...",
+          "image": "loading...",
+          "version": 'loading...',
+          "created": "loading...",
+          "updated": "loading..."
+        }, {
+          "task": 'loading...',
+          "task_name": "loading...",
+          "pk": 'loading...',
+          "title": "loading...",
+          "image": "loading...",
+          "version": 'loading...',
+          "created": "loading...",
+          "updated": "loading..."
+        },
 
         {
-            "task": 'loading...',
-            "task_name": "loading...",
-            "pk": 'loading...',
-            "title": "loading...",
-            "image": "loading...",
-            "version": 'loading...',
-            "created": "loading...",
-            "updated": "loading..."
-          }
+          "task": 'loading...',
+          "task_name": "loading...",
+          "pk": 'loading...',
+          "title": "loading...",
+          "image": "loading...",
+          "version": 'loading...',
+          "created": "loading...",
+          "updated": "loading..."
+        }
       ]
 
 
-      
+
   }
   //this is my onclick event to pass project ID
   EditTask(task) {
     localStorage.setItem("singleTask", JSON.stringify(task));
 
 
-    const username = 'admin'
-    const password = 'Pass@1234'
-    const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+    const mytoken = JSON.parse(localStorage.getItem('user'));
+    const token = mytoken.token;
     axios.get("https://ecological.chinikiguard.com/projects/api/task/image/list/",
       {
         headers:
         {
-          'Authorization': `Basic ${token}`,
+          'Authorization': `Token ${token}`,
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'GET,POST,HEAD,OPTIONS',
           'Access-Control-Allow-Credentials': true
@@ -144,10 +143,38 @@ export default class AllTasks extends Component {
 
       })
 
-     
+
 
     // (task)
   }
+
+  DeleteTask(task) {
+    const mytoken = JSON.parse(localStorage.getItem('user'));
+    const token = mytoken.token;
+    const PIds = task.pk;
+    axios.delete(`https://ecological.chinikiguard.com/projects/api/tasks/delete/${PIds}/`,
+      {
+        headers:
+        {
+          'Authorization': `Token ${token}`,
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'DELETE, OPTIONS',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'application/json'
+        },
+      })
+      .then(res => {
+
+        console.log(res);
+        console.log(res.data);
+        this.setState({ loading: true });
+
+        window.location = "/alltasks"
+
+      })
+
+  }
+
 
   render() {
 
@@ -327,7 +354,7 @@ export default class AllTasks extends Component {
                       </div>
 
                     )}
-                    
+
                     {/*begin::Row*/}
                     {this.state.myloading ? (
 
@@ -399,17 +426,47 @@ export default class AllTasks extends Component {
                                 </div>
 
 
+                                <div className="d-flex">
 
-                                {/*end::Info*/}
-                                <Link to="/EditTask"
-                                  className="btn btn-block btn-sm btn-light-primary font-weight-bolder text-uppercase py-4"
-                                  onClick={this.EditTask.bind(this, task)}
-                                >Edit Task</Link>
+                                  {/*end::Info*/}
+                                  <p>
+
+                                    <div className="d-flex mr-7">
+
+                                      <Link to="/EditTask"
+                                        className="btn btn-block btn-sm btn-light-primary font-weight-bolder text-uppercase py-4"
+                                        onClick={this.EditTask.bind(this, task)}
+                                      >Edit Task</Link>
+                                    </div>
+                                  </p>
+
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                 <p>
+                                    <div className="d-flex  mr-7">
+                                      <Link
+                                        className="btn btn-block btn-sm btn-light-danger font-weight-bolder text-uppercase py-4"
+                                        onClick={this.DeleteTask.bind(this, task)}
+                                        disabled={this.state.loading}
+                                      >
+                                        {this.state.loading && (
+                                          <center><Spinner animation="border" variant="white" /></center>
+                                        )}
+                                Delete Task
+                                </Link>
+
+                                    </div>
+                                  </p>
+                                </div>
+                                {/*end::Body*/}
                               </div>
-                              {/*end::Body*/}
+                              {/*end:: Card*/}
                             </div>
-                            {/*end:: Card*/}
                           </div>
+
 
 
                         ))}

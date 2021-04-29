@@ -15,6 +15,7 @@ export default class AllProjects extends Component {
     this.state = {
       project: "",
       myloading: true,
+      loading: false,
       show: false,
       message: "",
       allProzz: [],
@@ -119,25 +120,27 @@ export default class AllProjects extends Component {
   }
 
   DeleteProject(project) {
-    
-    const username = 'admin'
-    const password = 'Pass@1234'
-    const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
-    const PIds=project.pk;
+
+    const mytoken = JSON.parse(localStorage.getItem('user'));
+    const token = mytoken.token;
+    const PIds = project.pk;
     axios.delete(`https://ecological.chinikiguard.com/projects/api/delete/${PIds}/`,
       {
         headers:
         {
-          'Authorization': `Basic ${token}`,
+          'Authorization': `Token ${token}`,
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'DELETE, OPTIONS',
           'Access-Control-Allow-Credentials': true,
-          'Content-Type': 'application/json' },
+          'Content-Type': 'application/json'
+        },
       })
       .then(res => {
-       
+
         console.log(res);
         console.log(res.data);
+        this.setState({ loading: true });
+
         window.location = "/allprojects"
 
       })
@@ -147,14 +150,13 @@ export default class AllProjects extends Component {
     localStorage.setItem("singleProjects", JSON.stringify(project));
     // console.log(project.pk)
 
-    const username = 'admin'
-    const password = 'Pass@1234'
-    const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+    const mytoken = JSON.parse(localStorage.getItem('user'));
+    const token = mytoken.token;
     axios.get(`https://ecological.chinikiguard.com/projects/api/tasks/list/?for_user=true&project=${project.pk}`,
       {
         headers:
         {
-          'Authorization': `Basic ${token}`,
+          'Authorization': `Token ${token}`,
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'GET,POST,HEAD,OPTIONS',
           'Access-Control-Allow-Credentials': true
@@ -231,7 +233,7 @@ export default class AllProjects extends Component {
                                     <span className="nav-text font-size-lg py-2 font-weight-bold text-center"><h3>Dashboard</h3></span>
                                   </Link>
                                 </li>
-                            
+
                               </ul>
                               {/*end::Nav Tabs*/}
                               {/*begin::Nav Content*/}
@@ -254,103 +256,103 @@ export default class AllProjects extends Component {
                     {showProjectManager && (
 
                       <div class="row">
-<div className="col-xl-12">
-  {/*begin::Nav Panel Widget 1*/}
-  <div className="card card-custom gutter-b">
-    {/*begin::Body*/}
-    <div className="card-body">
-      {/*begin::Nav Tabs*/}
-      <ul className="dashboard-tabs nav nav-pills nav-success row row-paddingless m-0 p-0 flex-column flex-sm-row" role="tablist">
-        {/*begin::Item*/}
-        <li className="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-3 mb-3 mb-lg-0">
-          <Link to="/dashboard" className="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" >
-            <span className="nav-icon py-2 w-auto">
-              <span className="svg-icon svg-icon-3x">
-                {/*begin::Svg Icon | path:assets/media/svg/icons/Home/Library.svg*/}
-                <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                  <g stroke="none" strokeWidth={1} fill="none" fillRule="evenodd">
-                    <rect x={0} y={0} width={24} height={24} />
-                    <path d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z" fill="#000000" />
-                    <rect fill="#000000" opacity="0.3" transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)" x="16.3255682" y="2.94551858" width={3} height={18} rx={1} />
-                  </g>
-                </svg>
-                {/*end::Svg Icon*/}
-              </span>
-            </span>
-            <span className="nav-text font-size-lg py-2 font-weight-bold text-center"><h3>Dashboard</h3></span>
-          </Link>
-        </li>
-    
-      </ul>
-      {/*end::Nav Tabs*/}
-      {/*begin::Nav Content*/}
-      <div className="tab-content m-0 p-0">
-        <div className="tab-pane active" id="forms_widget_tab_1" role="tabpanel" />
-        <div className="tab-pane" id="forms_widget_tab_2" role="tabpanel" />
-        <div className="tab-pane" id="forms_widget_tab_3" role="tabpanel" />
-        <div className="tab-pane" id="forms_widget_tab_4" role="tabpanel" />
-        <div className="tab-pane" id="forms_widget_tab_6" role="tabpanel" />
-      </div>
-      {/*end::Nav Content*/}
-    </div>
-    {/*end::Body*/}
-  </div>
-  {/*begin::Nav Panel Widget 1*/}
-</div>
-</div>
+                        <div className="col-xl-12">
+                          {/*begin::Nav Panel Widget 1*/}
+                          <div className="card card-custom gutter-b">
+                            {/*begin::Body*/}
+                            <div className="card-body">
+                              {/*begin::Nav Tabs*/}
+                              <ul className="dashboard-tabs nav nav-pills nav-success row row-paddingless m-0 p-0 flex-column flex-sm-row" role="tablist">
+                                {/*begin::Item*/}
+                                <li className="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-3 mb-3 mb-lg-0">
+                                  <Link to="/dashboard" className="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" >
+                                    <span className="nav-icon py-2 w-auto">
+                                      <span className="svg-icon svg-icon-3x">
+                                        {/*begin::Svg Icon | path:assets/media/svg/icons/Home/Library.svg*/}
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                          <g stroke="none" strokeWidth={1} fill="none" fillRule="evenodd">
+                                            <rect x={0} y={0} width={24} height={24} />
+                                            <path d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z" fill="#000000" />
+                                            <rect fill="#000000" opacity="0.3" transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)" x="16.3255682" y="2.94551858" width={3} height={18} rx={1} />
+                                          </g>
+                                        </svg>
+                                        {/*end::Svg Icon*/}
+                                      </span>
+                                    </span>
+                                    <span className="nav-text font-size-lg py-2 font-weight-bold text-center"><h3>Dashboard</h3></span>
+                                  </Link>
+                                </li>
+
+                              </ul>
+                              {/*end::Nav Tabs*/}
+                              {/*begin::Nav Content*/}
+                              <div className="tab-content m-0 p-0">
+                                <div className="tab-pane active" id="forms_widget_tab_1" role="tabpanel" />
+                                <div className="tab-pane" id="forms_widget_tab_2" role="tabpanel" />
+                                <div className="tab-pane" id="forms_widget_tab_3" role="tabpanel" />
+                                <div className="tab-pane" id="forms_widget_tab_4" role="tabpanel" />
+                                <div className="tab-pane" id="forms_widget_tab_6" role="tabpanel" />
+                              </div>
+                              {/*end::Nav Content*/}
+                            </div>
+                            {/*end::Body*/}
+                          </div>
+                          {/*begin::Nav Panel Widget 1*/}
+                        </div>
+                      </div>
 
                     )}
                     {/* Task Manager */}
                     {showTaskManager && (
 
 
-                     <div class="row">
-<div className="col-xl-12">
-  {/*begin::Nav Panel Widget 1*/}
-  <div className="card card-custom gutter-b">
-    {/*begin::Body*/}
-    <div className="card-body">
-      {/*begin::Nav Tabs*/}
-      <ul className="dashboard-tabs nav nav-pills nav-success row row-paddingless m-0 p-0 flex-column flex-sm-row" role="tablist">
-        {/*begin::Item*/}
-        <li className="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-3 mb-3 mb-lg-0">
-          <Link to="/dashboard" className="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" >
-            <span className="nav-icon py-2 w-auto">
-              <span className="svg-icon svg-icon-3x">
-                {/*begin::Svg Icon | path:assets/media/svg/icons/Home/Library.svg*/}
-                <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                  <g stroke="none" strokeWidth={1} fill="none" fillRule="evenodd">
-                    <rect x={0} y={0} width={24} height={24} />
-                    <path d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z" fill="#000000" />
-                    <rect fill="#000000" opacity="0.3" transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)" x="16.3255682" y="2.94551858" width={3} height={18} rx={1} />
-                  </g>
-                </svg>
-                {/*end::Svg Icon*/}
-              </span>
-            </span>
-            <span className="nav-text font-size-lg py-2 font-weight-bold text-center"><h3>Dashboard</h3></span>
-          </Link>
-        </li>
-    
-      </ul>
-      {/*end::Nav Tabs*/}
-      {/*begin::Nav Content*/}
-      <div className="tab-content m-0 p-0">
-        <div className="tab-pane active" id="forms_widget_tab_1" role="tabpanel" />
-        <div className="tab-pane" id="forms_widget_tab_2" role="tabpanel" />
-        <div className="tab-pane" id="forms_widget_tab_3" role="tabpanel" />
-        <div className="tab-pane" id="forms_widget_tab_4" role="tabpanel" />
-        <div className="tab-pane" id="forms_widget_tab_6" role="tabpanel" />
-      </div>
-      {/*end::Nav Content*/}
-    </div>
-    {/*end::Body*/}
-  </div>
-  {/*begin::Nav Panel Widget 1*/}
-</div>
-</div>
+                      <div class="row">
+                        <div className="col-xl-12">
+                          {/*begin::Nav Panel Widget 1*/}
+                          <div className="card card-custom gutter-b">
+                            {/*begin::Body*/}
+                            <div className="card-body">
+                              {/*begin::Nav Tabs*/}
+                              <ul className="dashboard-tabs nav nav-pills nav-success row row-paddingless m-0 p-0 flex-column flex-sm-row" role="tablist">
+                                {/*begin::Item*/}
+                                <li className="nav-item d-flex col-sm flex-grow-1 flex-shrink-0 mr-3 mb-3 mb-lg-0">
+                                  <Link to="/dashboard" className="nav-link border py-10 d-flex flex-grow-1 rounded flex-column align-items-center" data-toggle="pill" >
+                                    <span className="nav-icon py-2 w-auto">
+                                      <span className="svg-icon svg-icon-3x">
+                                        {/*begin::Svg Icon | path:assets/media/svg/icons/Home/Library.svg*/}
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                          <g stroke="none" strokeWidth={1} fill="none" fillRule="evenodd">
+                                            <rect x={0} y={0} width={24} height={24} />
+                                            <path d="M5,3 L6,3 C6.55228475,3 7,3.44771525 7,4 L7,20 C7,20.5522847 6.55228475,21 6,21 L5,21 C4.44771525,21 4,20.5522847 4,20 L4,4 C4,3.44771525 4.44771525,3 5,3 Z M10,3 L11,3 C11.5522847,3 12,3.44771525 12,4 L12,20 C12,20.5522847 11.5522847,21 11,21 L10,21 C9.44771525,21 9,20.5522847 9,20 L9,4 C9,3.44771525 9.44771525,3 10,3 Z" fill="#000000" />
+                                            <rect fill="#000000" opacity="0.3" transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519)" x="16.3255682" y="2.94551858" width={3} height={18} rx={1} />
+                                          </g>
+                                        </svg>
+                                        {/*end::Svg Icon*/}
+                                      </span>
+                                    </span>
+                                    <span className="nav-text font-size-lg py-2 font-weight-bold text-center"><h3>Dashboard</h3></span>
+                                  </Link>
+                                </li>
 
-                      )}
+                              </ul>
+                              {/*end::Nav Tabs*/}
+                              {/*begin::Nav Content*/}
+                              <div className="tab-content m-0 p-0">
+                                <div className="tab-pane active" id="forms_widget_tab_1" role="tabpanel" />
+                                <div className="tab-pane" id="forms_widget_tab_2" role="tabpanel" />
+                                <div className="tab-pane" id="forms_widget_tab_3" role="tabpanel" />
+                                <div className="tab-pane" id="forms_widget_tab_4" role="tabpanel" />
+                                <div className="tab-pane" id="forms_widget_tab_6" role="tabpanel" />
+                              </div>
+                              {/*end::Nav Content*/}
+                            </div>
+                            {/*end::Body*/}
+                          </div>
+                          {/*begin::Nav Panel Widget 1*/}
+                        </div>
+                      </div>
+
+                    )}
 
                     {/*begin::Row*/}
                     {this.state.myloading ? (
@@ -413,32 +415,40 @@ export default class AllProjects extends Component {
                                   <span className="btn btn-light-primary btn-sm font-weight-bold btn-upper btn-text">{project.status}</span>
                                 </div>
                               </div>
-                             
+
                               <div className="d-flex">
-                              
-                              <p>
-                              <div className="d-flex mr-7">
-                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                <p>
+                                  <div className="d-flex mr-7">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                               <Link to="/EditProject"
-                                className="btn btn-block btn-sm btn-light-primary font-weight-bolder text-uppercase py-4"
-                                onClick={this.EditProject.bind(this, project)}
-                              >Edit Project</Link>
-                              </div>
-                              </p>
+                                      className="btn btn-block btn-sm btn-light-primary font-weight-bolder text-uppercase py-4"
+                                      onClick={this.EditProject.bind(this, project)}
+                                    >Edit Project</Link>
+                                  </div>
+                                </p>
                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                <p>
-                              <div className="d-flex  mr-7">
-                              <Link 
-                                className="btn btn-block btn-sm btn-light-danger font-weight-bolder text-uppercase py-4"
-                                onClick={this.DeleteProject.bind(this, project)}
-                              >Delete Project</Link>
-                              
-                              </div>
-                              </p>
+                                  <div className="d-flex  mr-7">
+                                    <Link
+                                      className="btn btn-block btn-sm btn-light-danger font-weight-bolder text-uppercase py-4"
+                                      onClick={this.DeleteProject.bind(this, project)}
+                                      disabled={this.state.loading}
+                                    >
+                                      {this.state.loading && (
+                                        <center><Spinner animation="border" variant="white" /></center>
+                                      )}
+                                Delete Project
+
+
+                              </Link>
+
+                                  </div>
+                                </p>
                               </div>
                               {/*end::Body*/}
                             </div>

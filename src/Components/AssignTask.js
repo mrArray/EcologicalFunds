@@ -277,12 +277,12 @@ export default class AssignTask extends Component {
                                       {/*begin::Input*/}
                                       <div className="form-group">
                                         <label>Projects</label>
-                                        <select name="country" className="form-control"
+                                        <select name="address1" className="form-control"
                                           value={this.state.project}
                                           onChange={this.onChangeProject}
                                           validations={[required]}
                                         >
-                                          <option value>Select</option>
+                                          <option value="">Select</option>
                                           {projectId.map(project => (
 
                                             <option value={`${project.pk}`}>{project.title}</option>
@@ -293,13 +293,12 @@ export default class AssignTask extends Component {
                                       {/*end::Input*/}
                                       <div className="form-group">
                                         <label>Status</label>
-                                        <select name="country" className="form-control"
+                                        <select name="address1" className="form-control"
                                           value={this.state.status}
                                           onChange={this.onChangeStatus}
                                           validations={[required]}
-                                          name="projectstatus"
                                         >
-                                          <option value>Select</option>
+                                          <option value="">Select</option>
                                           <option value="open">Open</option>
                                           <option value="inprogress">In Progress</option>
                                           <option value="completed">Completed</option>
@@ -309,7 +308,7 @@ export default class AssignTask extends Component {
                                       {/*begin::Input*/}
                                       <div className="form-group">
                                         <label>Task Name</label>
-                                        <input type="text" className="form-control" name="taskname"
+                                        <input type="text" className="form-control" name="address1"
                                           value={this.state.title}
                                           onChange={this.onChangeTitle}
                                           validations={[required]}
@@ -322,7 +321,7 @@ export default class AssignTask extends Component {
                                           {/*begin::Input*/}
                                           <div className="form-group">
                                             <label>Task Description</label>
-                                            <textarea type="text" className="form-control" name="taskdesc"
+                                            <textarea type="text" className="form-control" name="address1"
                                               value={this.state.description}
                                               onChange={this.onChangeDescription}
                                               validations={[required]}
@@ -346,7 +345,7 @@ export default class AssignTask extends Component {
                                           value={this.state.assigned_to}
                                           onChange={this.onChangeAssignedTo}
                                           validations={[required]}
-                                          name="assignedto"
+                                          // name="address1"
                                         >
                                           
                                           <option value>Select</option>
@@ -366,7 +365,6 @@ export default class AssignTask extends Component {
                                           value={this.state.location}
                                           onChange={this.onChangeLocation}
                                           validations={[required]}
-                                          name="tasklocation"
                                           placeholder="task location" />
                                         <span className="form-text text-muted">Please enter Task Description.</span>
                                       </div>
@@ -375,17 +373,17 @@ export default class AssignTask extends Component {
                                       {/*begin::Input*/}
                                       <div className="form-group">
                                         <label>Task Start Date</label>
-                                        <input type="text" className="form-control"
+                                        <input type="date"  format="YYYY-MM-DD" className="form-control"
                                           value={this.state.start_date}
                                           onChange={this.onChangeStartDate}
                                           validations={[required]}
-                                          name="startdate" placeholder="YYYY-MM-DD" />
+                                           placeholder="YYYY-MM-DD" />
                                         <span className="form-text text-muted">Please enter Task start date.</span>
                                       </div>
                                       {/*end::Input*/}
                                       <div className="form-group">
                                         <label>Task Due Date</label>
-                                        <input type="text" className="form-control" name="duedate"
+                                        <input type="date" format="YYYY-MM-DD" className="form-control" 
                                           value={this.state.due_date}
                                           onChange={this.onChangeDueDate}
                                           validations={[required]}
