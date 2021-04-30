@@ -9,14 +9,13 @@ import Dashboard from './Dashboard';
 import AssignTask from './AssignTask';
 import Alltasks from './Alltasks';
 import EditProject from './EditProject';
-import ViewProjects from './ViewProjects';
-import ViewTasks from './ViewTasks';
 import EditTask from './EditTask';
 import TaskManagerDashboard from './TaskManagerDashboard';
 import UserProfile from './UserProfile';
 import OngoingTask from './OngoingTask';
 import OpenTask from './OpenTask';
 import CompletedTask from './CompletedTask';
+import EditTaskImage from './EditTaskImage';
 
 
 
@@ -60,11 +59,7 @@ const Content = () => {
             <Route exact path="/" component={EditProject} />
             <Route path="/EditProject" component={EditProject} />
 
-            <Route exact path="/" component={ViewProjects} />
-            <Route path="/ViewProjects" component={ViewProjects} />
-
-            <Route exact path="/" component={ViewTasks} />
-            <Route path="/ViewTasks" component={ViewTasks} />
+          
 
             <Route exact path="/" component={EditTask} />
             <Route path="/EditTask" component={EditTask} />
@@ -83,6 +78,9 @@ const Content = () => {
 
             <Route exact path="/" component={CompletedTask} />
             <Route path="/CompletedTask" component={CompletedTask} />
+
+            <Route exact path="/" component={EditTaskImage} />
+            <Route path="/EditTaskImages" component={EditTaskImage} />
 
 
         </Switch>

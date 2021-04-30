@@ -28,6 +28,12 @@ export default class AllTasks extends Component {
   }
 
   componentDidMount() {
+
+    //check if user is login
+    if (!localStorage.getItem('user')) {
+
+      return (<Redirect to={'/login'} />)
+    }
     //user  stored user information (including JWT) from AuthService class
     const user = AuthLogin.getCurrentUser();
     //check User Group
@@ -56,6 +62,8 @@ export default class AllTasks extends Component {
         if (res.data) {
           localStorage.setItem("AllTasksData", JSON.stringify(res.data));
           localStorage.setItem("singleTaskImage", JSON.stringify(data));
+          localStorage.setItem("singleTaskFile", JSON.stringify(FileData));
+
 
         }
         // (res);
@@ -63,7 +71,7 @@ export default class AllTasks extends Component {
         this.setState({ allTazz: res.data, myloading: false });
       })
 
-    const data =
+      const data =
       [
         {
           "task": 'loading...',
@@ -106,6 +114,49 @@ export default class AllTasks extends Component {
           "updated": "loading..."
         }
       ]
+      const FileData =
+      [
+        {
+          "task": 'loading...',
+          "task_name": "loading...",
+          "pk": 'loading...',
+          "title": "loading...",
+          "file": "loading...",
+          "version": 'loading...',
+          "created": "loading...",
+          "updated": "loading..."
+        },
+        {
+          "task": 'loading...',
+          "task_name": "loading...",
+          "pk": 'loading...',
+          "title": "loading...",
+          "file": "loading...",
+          "version": 'loading...',
+          "created": "loading...",
+          "updated": "loading..."
+        }, {
+          "task": 'loading...',
+          "task_name": "loading...",
+          "pk": 'loading...',
+          "title": "loading...",
+          "file": "loading...",
+          "version": 'loading...',
+          "created": "loading...",
+          "updated": "loading..."
+        },
+
+        {
+          "task": 'loading...',
+          "task_name": "loading...",
+          "pk": 'loading...',
+          "title": "loading...",
+          "file": "loading...",
+          "version": 'loading...',
+          "created": "loading...",
+          "updated": "loading..."
+        }
+      ]
 
 
 
@@ -142,6 +193,32 @@ export default class AllTasks extends Component {
         window.location = "/EditTask"
 
       })
+      axios.get("https://ecological.chinikiguard.com/projects/api/task/document/list/",
+      {
+        headers:
+        {
+          'Authorization': `Token ${token}`,
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET,POST,HEAD,OPTIONS',
+          'Access-Control-Allow-Credentials': true
+        },
+        params: {
+
+          task: `${task.pk}`
+        }
+
+      })
+      .then(res => {
+        if (res.data) {
+          localStorage.setItem("singleTaskFile", JSON.stringify(res.data));
+
+        }
+        // console.log(res);
+        // console.log(res.data);
+        window.location = "/EditTask"
+
+      })
+
 
 
 
@@ -178,10 +255,7 @@ export default class AllTasks extends Component {
 
   render() {
 
-    if (!localStorage.getItem('user')) {
-
-      return (<Redirect to={'/login'} />)
-    }
+  
     const { currentUser, showAdministrator, showTaskManager, showProjectManager } = this.state;
 
     return (
@@ -305,8 +379,6 @@ export default class AllTasks extends Component {
                     )}
                     {/* Task Manager */}
                     {showTaskManager && (
-
-
                       <div class="row">
                         <div className="col-xl-12">
                           {/*begin::Nav Panel Widget 1*/}
@@ -352,7 +424,6 @@ export default class AllTasks extends Component {
                           {/*begin::Nav Panel Widget 1*/}
                         </div>
                       </div>
-
                     )}
 
                     {/*begin::Row*/}
@@ -425,42 +496,91 @@ export default class AllTasks extends Component {
                                   </div>
                                 </div>
 
+                                {showAdministrator && (
 
-                                <div className="d-flex">
+                                  <div className="d-flex">
 
-                                  {/*end::Info*/}
-                                  <p>
+                                    {/*end::Info*/}
+                                    <p>
 
-                                    <div className="d-flex mr-7">
+                                      <div className="d-flex mr-7">
 
-                                      <Link to="/EditTask"
-                                        className="btn btn-block btn-sm btn-light-primary font-weight-bolder text-uppercase py-4"
-                                        onClick={this.EditTask.bind(this, task)}
-                                      >Edit Task</Link>
-                                    </div>
-                                  </p>
+                                        <Link to="/EditTask"
+                                          className="btn btn-block btn-sm btn-light-primary font-weight-bolder text-uppercase py-4"
+                                          onClick={this.EditTask.bind(this, task)}
+                                        >Edit Task</Link>
+                                      </div>
+                                    </p>
 
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                 <p>
-                                    <div className="d-flex  mr-7">
-                                      <Link
-                                        className="btn btn-block btn-sm btn-light-danger font-weight-bolder text-uppercase py-4"
-                                        onClick={this.DeleteTask.bind(this, task)}
-                                        disabled={this.state.loading}
-                                      >
-                                        {this.state.loading && (
-                                          <center><Spinner animation="border" variant="white" /></center>
-                                        )}
+                                    <p>
+                                      <div className="d-flex  mr-7">
+                                        <Link
+                                          className="btn btn-block btn-sm btn-light-danger font-weight-bolder text-uppercase py-4"
+                                          onClick={this.DeleteTask.bind(this, task)}
+                                          disabled={this.state.loading}
+                                        >
+                                          {this.state.loading && (
+                                            <center><Spinner animation="border" variant="white" /></center>
+                                          )}
                                 Delete Task
                                 </Link>
 
-                                    </div>
-                                  </p>
-                                </div>
+                                      </div>
+                                    </p>
+                                  </div>
+                                )}
+                                {showProjectManager && (
+
+                                  <div className="d-flex">
+
+                                    {/*end::Info*/}
+                                    <p>
+
+                                      <div className="d-flex mr-7">
+
+                                        <Link to="/EditTask"
+                                          className="btn btn-block btn-sm btn-light-primary font-weight-bolder text-uppercase py-4"
+                                          onClick={this.EditTask.bind(this, task)}
+                                        >Edit Task</Link>
+                                      </div>
+                                    </p>
+
+                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <p>
+                                      <div className="d-flex  mr-7">
+                                        <Link
+                                          className="btn btn-block btn-sm btn-light-danger font-weight-bolder text-uppercase py-4"
+                                          onClick={this.DeleteTask.bind(this, task)}
+                                          disabled={this.state.loading}
+                                        >
+                                          {this.state.loading && (
+                                            <center><Spinner animation="border" variant="white" /></center>
+                                          )}
+                                    Delete Task
+                                    </Link>
+
+                                      </div>
+                                    </p>
+                                  </div>
+                                )}
+                                {showTaskManager && (
+
+                                  <Link to="/EditTask"
+                                    className="btn btn-block btn-sm btn-light-primary font-weight-bolder text-uppercase py-4"
+                                    onClick={this.EditTask.bind(this, task)}
+                                  >Edit Task
+                                  </Link>
+                                )}
+
                                 {/*end::Body*/}
                               </div>
                               {/*end:: Card*/}

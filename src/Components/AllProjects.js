@@ -26,6 +26,12 @@ export default class AllProjects extends Component {
     };
   }
   componentDidMount() {
+
+    //check if user is login
+    if (!localStorage.getItem('user')) {
+
+      return (<Redirect to={'/login'} />)
+    }
     //user  stored user information (including JWT) from AuthService class
     const user = AuthLogin.getCurrentUser();
     //check User Group
@@ -182,10 +188,7 @@ export default class AllProjects extends Component {
 
   render() {
 
-    if (!localStorage.getItem('user')) {
-
-      return (<Redirect to={'/login'} />)
-    }
+  
 
     const { currentUser, showAdministrator, showTaskManager, showProjectManager } = this.state;
 

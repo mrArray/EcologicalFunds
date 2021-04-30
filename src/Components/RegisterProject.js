@@ -108,6 +108,12 @@ export default class RegisterProject extends Component {
 
 
   componentDidMount() {
+
+    //check if user is login
+    if (!localStorage.getItem('user')) {
+
+      return (<Redirect to={'/login'} />)
+    }
     const script = document.createElement("script");
 
     script.src = "./assets/dist/assets/js/pages/custom/wizard/wizard-1.js";
@@ -162,36 +168,6 @@ export default class RegisterProject extends Component {
 
   handleRegisterProject(e) {
     e.preventDefault();
-
-    // const username = 'admin'
-    // const password = 'Pass@1234'
-    // const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
-    // axios.post("https://ecological.chinikiguard.com/projects/api/create/", {
-
-    //   title: this.state.title,
-    //   description: this.state.description,
-    //   status: this.state.status,
-    //   location: this.state.location,
-    //   start_date: this.state.start_date,
-    //   due_date: this.state.due_date
-
-    // },
-
-    //   {
-    //     headers:
-    //     {
-    //       'Authorization': `Basic ${token}`,
-    //       'Access-Control-Allow-Origin': '*',
-    //       'Access-Control-Allow-Methods': 'GET,POST,HEAD,OPTIONS',
-    //       'Access-Control-Allow-Credentials': true
-    //     },
-
-    //   })
-    //   .then(res => {
-    //     console.log(res);
-    //     console.log(res.data);
-    //     // window.location = "/dashboard"
-    //   })
 
     this.setState({
       message: "",

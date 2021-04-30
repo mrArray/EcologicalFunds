@@ -85,6 +85,10 @@ export default class Register extends Component {
 
 
   componentDidMount() {
+    if (localStorage.getItem('user')) {
+
+      return (<Redirect to={'/dashboard'} />)
+    }
     const script = document.createElement("script");
 
     script.src = "./assets/dist/assets/js/pages/custom/wizard/wizard-5.js";

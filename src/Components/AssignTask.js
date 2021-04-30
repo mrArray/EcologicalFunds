@@ -59,6 +59,11 @@ export default class AssignTask extends Component {
     };
   }
   componentDidMount() {
+    //check if user is login 
+    if (!localStorage.getItem('user')) {
+
+      return (<Redirect to={'/login'} />)
+    }
     const script = document.createElement("script");
 
     script.src = "./assets/dist/assets/js/pages/custom/wizard/wizard-3.js";

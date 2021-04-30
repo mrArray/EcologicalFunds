@@ -37,6 +37,12 @@ export default class Login extends Component {
   }
 
 
+  componentDidMount(){
+
+    if (localStorage.getItem('user')) {
+      return (<Redirect to={'/dashboard'} />)
+  }
+  }
 
  onChangeUsername(e) {
     this.setState({
@@ -92,9 +98,7 @@ export default class Login extends Component {
 
   render() {
 
-    if (localStorage.getItem('user')) {
-      return (<Redirect to={'/dashboard'} />)
-  }
+    
 
     const { loading } = this.state;
 

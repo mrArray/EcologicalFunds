@@ -61,10 +61,14 @@ const TaskManagerDashboard = () => {
                      setCompletedTask(completedTask)
                 }));
 
-    };
+  };
 
   useEffect(() => {
     TotalProjectTasks();
+    if (!localStorage.getItem('user')) {
+
+      return (<Redirect to={'/login'} />)
+    }
 
     //start js style
     const script = document.createElement("script");

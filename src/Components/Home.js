@@ -6,6 +6,10 @@ import { Redirect, Link} from 'react-router-dom';
 export default class Home extends Component {
 
     componentDidMount () {
+
+      if (localStorage.getItem('user')) {
+        return (<Redirect to={'/dashboard'} />)
+    }
         const script = document.createElement("script");
         script.src = "./Landing/assets/js/core/jquery.min.js";
         script.src = "./Landing/assets/./";
@@ -25,12 +29,6 @@ export default class Home extends Component {
 
 
     render() {
-
-
-
-        if (localStorage.getItem('user')) {
-            return (<Redirect to={'/dashboard'} />)
-        }
     return (
 
         <div>

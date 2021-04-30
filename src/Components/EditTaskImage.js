@@ -28,7 +28,7 @@ const required = value => {
     }
 };
 
-export default class EditTask extends Component {
+export default class EditTaskImage extends Component {
 
     constructor(props) {
         super(props);
@@ -140,6 +140,7 @@ export default class EditTask extends Component {
 
             return (<Redirect to={'/login'} />)
           }
+
         //user  stored user information (including JWT) from AuthService class
         const user = AuthLogin.getCurrentUser();
         //check User Group
@@ -335,9 +336,9 @@ export default class EditTask extends Component {
         }
 
         const singleTask = JSON.parse(localStorage.getItem('singleTask'))
-        const singleTaskFile =JSON.parse(localStorage.getItem('singleTaskFile'))
+        const singleTaskImage = JSON.parse(localStorage.getItem('singleTaskImage'))
 
-        console.log(singleTaskFile)
+        console.log(singleTaskImage)
         const { loading } = this.state;
 
 
@@ -724,22 +725,22 @@ export default class EditTask extends Component {
                                                         {/*begin::Navi*/}
                                                         <div className="navi navi-hover navi-active navi-link-rounded navi-bold d-flex flex-row">
 
-                                                            {/*begin::Item*/}
-                                                            <div className="navi-item mr-2">
-                                                                <Link to="/EditTask" className="navi-link active">
+                                                             {/*begin::Item*/}
+                                                             <div className="navi-item mr-2">
+                                                                <Link to="/EditTask" className="navi-link">
                                                                     <span className="navi-text">Files</span>
                                                                 </Link>
                                                             </div>
                                                             {/*end::Item*/}
                                                             {/*begin::Item*/}
                                                             <div className="navi-item mr-2">
-                                                                <Link to="/EditTaskImages" className="navi-link">
+                                                                <Link to="/EditTaskImages" className="navi-link active">
                                                                     <span className="navi-text">Images</span>
                                                                 </Link>
                                                             </div>
                                                             {/*end::Item*/}
                                                             
-                                                            
+                                                           
                                                         </div>
                                                         {/*end::Navi*/}
                                                         {/*begin::Dropdown*/}
@@ -759,24 +760,24 @@ export default class EditTask extends Component {
 
                                         <div className="row">
                                             {/*begin::Col*/}
-                                            {singleTaskFile.map(taskFile => (
+                                            {singleTaskImage.map(taskImage => (
 
                                                 <div className="card-body p-0">
                                                     {/*begin::Details*/}
                                                     <div className="text-center mt-5 mb-md-0 mb-lg-5 mb-md-0 mb-lg-5 mb-lg-0 mb-5 d-flex flex-column">
-                                                        <a href="#" className="font-size-h5 font-weight-bolder text-dark-75 text-hover-primary mb-1">{taskFile.title}</a>
+                                                        <a href="#" className="font-size-h5 font-weight-bolder text-dark-75 text-hover-primary mb-1">{taskImage.title}</a>
                                                         {/* <span className="font-size-lg">Outlines keep poorly thought</span> */}
                                                     </div>
                                                     {/*end::Details*/}
                                                     {/*begin::Image*/}
                                                     <div className="overlay">
                                                         <div className="overlay-wrapper rounded bg-light text-center">
-                                                            <a href={taskFile.file}>
-                                                                <img src={taskFile.file} alt className="mw-100 w-200px" />
+                                                            <a href={taskImage.image}>
+                                                                <img src={taskImage.image} alt className="mw-100 w-200px" />
                                                             </a>
                                                         </div>
                                                         <div className="overlay-layer">
-                                                            <a href={taskFile.file} target="_blank" className="btn font-weight-bolder btn-sm btn-primary mr-2"> View</a>
+                                                            <a href={taskImage.image} target="_blank" className="btn font-weight-bolder btn-sm btn-primary mr-2"> View</a>
 
                                                             {/* <a href={taskImage.image}  download="taskImage" className="btn font-weight-bolder btn-sm btn-light-primary ">Download */}
 

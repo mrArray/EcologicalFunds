@@ -34,10 +34,14 @@ export default class EditProject extends Component {
             message: ""
         };
     }
-    // componentDidMount() {
-    // }
-    // componentWillMount() {
-    // };
+    componentDidMount() {
+        //check if user is login
+        if (!localStorage.getItem('user')) {
+
+            return (<Redirect to={'/login'} />)
+          }
+    }
+    
     refreshPage() {
         window.location.reload();
     }
@@ -79,9 +83,6 @@ export default class EditProject extends Component {
 
             })
     }
-
-
-
     handleStatus(e) {
         e.preventDefault();
 

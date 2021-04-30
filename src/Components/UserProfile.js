@@ -57,6 +57,10 @@ export default class UserProfile extends Component {
         };
     }
     componentDidMount() {
+        if (!localStorage.getItem('user')) {
+
+            return (<Redirect to={'/login'} />)
+          }
         const script = document.createElement("script");
 
         script.src = "./assets/dist/assets/js/pages/widgets.js";
