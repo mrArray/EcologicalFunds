@@ -16,6 +16,7 @@ import OngoingTask from './OngoingTask';
 import OpenTask from './OpenTask';
 import CompletedTask from './CompletedTask';
 import EditTaskImage from './EditTaskImage';
+import CompletedProjects from './CompletedProjects';
 
 
 
@@ -81,6 +82,9 @@ const Content = () => {
 
             <Route exact path="/" component={EditTaskImage} />
             <Route path="/EditTaskImages" component={EditTaskImage} />
+
+            <Route exact path="/" component={CompletedProjects} />
+            <Route path="/CompletedProjects" component={CompletedProjects} />
 
 
         </Switch>
