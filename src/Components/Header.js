@@ -34,6 +34,12 @@ class Header extends Component {
 
 
   }
+  componentDidMount(){
+
+    if (!localStorage.getItem('user')) {
+      return (<Redirect to={'/dashboard'} />)
+  }
+  }
 
 
 //   logout = () => {
@@ -83,7 +89,7 @@ routeChange =()=> {
               <div className="d-none d-lg-flex align-items-center mr-3">
                 {/*begin::Logo*/}
                 <Link onClick={this.routeChange} className="mr-20">
-                  <img alt="Logo" src="./assets/dist/assets/media/logos/logo-2-.png" className="max-h-35px" />
+                  <img alt="Logo" src="./assets/dist/assets/media/logos/logo-letter-9.png" className="max-h-35px" />
                 </Link>
                 {/*end::Logo*/}
 
