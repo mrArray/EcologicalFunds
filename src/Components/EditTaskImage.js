@@ -11,6 +11,10 @@ import AuthLogin from "../Authentications/AuthLogin";
 import axios from "axios";
 import Spinner from 'react-bootstrap/Spinner'
 import { ProgressBar } from 'react-bootstrap';
+import { Progress } from 'reactstrap';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 
@@ -52,94 +56,197 @@ export default class EditTaskImage extends Component {
             uploadFilePercentage: 0,
             Filetitle: '',
             file: null,
-            loadingFile: false
-
-
+            loadingFile: false,
+            selectedFile: null,
+            loaded: 0
         };
     }
-
-
-
-    //File functions
-    handleFileChange = (e) => {
-        this.setState({
-            file: e.target.files[0]
-        })
-    };
-    handleFileTitleChange = (e) => {
+    //My new Smart Upload  
+    handleFileTitleChangeSmart = (e) => {
         this.setState({
             Filetitle: e.target.value
         })
     };
-
-    handleSubmitFile = (e) => {
-        e.preventDefault();
-
-        const Fileoptions = {
-            onUploadProgress: (progressEvent) => {
-                const { loaded, total } = progressEvent;
-                let percent = Math.floor((loaded * 100) / total)
-                console.log(`${loaded}kb of ${total}kb | ${percent}%`);
-
-                if (percent < 100) {
-                    this.setState({ uploadFilePercentage: percent })
-                }
+    checkMimeType = (event) => {
+        //getting file object
+        let files = event.target.files
+        //define message container
+        let err = []
+        // list allow mime type
+        const types = ['image/png', 'image/jpeg', 'image/gif']
+        // loop access array
+        for (var x = 0; x < files.length; x++) {
+            // compare file type find doesn't matach
+            if (types.every(type => files[x].type !== type)) {
+                // create error message and assign to container   
+                err[x] = files[x].type + ' is not a supported format\n';
             }
+        };
+        for (var z = 0; z < err.length; z++) {// if message not same old that mean has error 
+            // discard selected file
+            toast.error(err[z])
+            event.target.value = null
         }
-
-
-        this.setState({
-            message: "",
-            successful: false,
-            loadingFile: true
-        });
+        return true;
+    }
+    maxSelectFile = (event) => {
+        let files = event.target.files
+        if (files.length > 3) {
+            const msg = 'Only 3 images can be uploaded at a time'
+            event.target.value = null
+            toast.warn(msg)
+            return false;
+        }
+        return true;
+    }
+    checkFileSize = (event) => {
+        let files = event.target.files
+        let size = 2000000
+        let err = [];
+        for (var x = 0; x < files.length; x++) {
+            if (files[x].size > size) {
+                err[x] = files[x].type + 'is too large, please pick a smaller file\n';
+            }
+        };
+        for (var z = 0; z < err.length; z++) {// if message not same old that mean has error 
+            // discard selected file
+            toast.error(err[z])
+            event.target.value = null
+        }
+        return true;
+    }
+    onChangeHandler = event => {
+        var files = event.target.files
+        if (this.maxSelectFile(event) && this.checkMimeType(event) && this.checkFileSize(event)) {
+            // if return true allow to setState
+            this.setState({
+                selectedFile: files,
+                loaded: 0
+            })
+        }
+    }
+    onClickHandler = () => {
 
         const mytoken = JSON.parse(localStorage.getItem('user'));
         const token = mytoken.token;
         const singleTask = JSON.parse(localStorage.getItem('singleTask'))
         const task = singleTask.pk;
-        let formData = new FormData();
-        formData.append('file', this.state.file);
-        formData.append('title', this.state.Filetitle);
-        formData.append('task', task);
+        const data = new FormData()
 
-        let url = 'https://ecological.chinikiguard.com/projects/api/task/document/add/';
-
-        axios.post(url, formData,
-            {
-                headers: {
-                    'content-type': 'multipart/form-data',
-                    'Authorization': `Token ${token}`,
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS',
-                    'Access-Control-Allow-Credentials': true
-                }
+        for (var x = 0; x < this.state.selectedFile.length; x++) {
+            data.append('file', this.state.selectedFile[x])
+            data.append('title', this.state.Filetitle);
+            data.append('task', task);
+        }
+        axios.post("https://ecological.chinikiguard.com/projects/api/task/document/add/", data, {
+            headers: {
+                'content-type': 'multipart/form-data',
+                'Authorization': `Token ${token}`,
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS',
+                'Access-Control-Allow-Credentials': true
             },
-
-            Fileoptions)
-            .then(res => {
-                console.log(res)
-                this.setState({ avatar: res.data.image, uploadFilePercentage: 100 }, () => {
-                    setTimeout(() => {
-                        this.setState({ uploadFilePercentage: 0 })
-                    }, 1000);
-                })
-
+            onUploadProgress: ProgressEvent => {
                 this.setState({
-                    message: "",
-                    successful: false,
-                    loadingFile: true
-                });
-                window.location = "/alltasks"
+                    loaded: (ProgressEvent.loaded / ProgressEvent.total * 100),
+                })
+            },
+        })
+            .then(res => {
+                // then print response status
+                console.log(res)
+                toast.success('upload success')
+                window.location = "/EditTask"
+
             })
-    };
+            .catch(err => {
+                // then print response status
+                toast.error('upload fail')
+            })
+    }
+
+
+
+    //File functions
+    // handleFileChange = (e) => {
+    //     this.setState({
+    //         file: e.target.files[0]
+    //     })
+    // };
+    // handleFileTitleChange = (e) => {
+    //     this.setState({
+    //         Filetitle: e.target.value
+    //     })
+    // };
+
+    // handleSubmitFile = (e) => {
+    //     e.preventDefault();
+
+    //     const Fileoptions = {
+    //         onUploadProgress: (progressEvent) => {
+    //             const { loaded, total } = progressEvent;
+    //             let percent = Math.floor((loaded * 100) / total)
+    //             console.log(`${loaded}kb of ${total}kb | ${percent}%`);
+
+    //             if (percent < 100) {
+    //                 this.setState({ uploadFilePercentage: percent })
+    //             }
+    //         }
+    //     }
+
+
+    //     this.setState({
+    //         message: "",
+    //         successful: false,
+    //         loadingFile: true
+    //     });
+
+    //     const mytoken = JSON.parse(localStorage.getItem('user'));
+    //     const token = mytoken.token;
+    //     const singleTask = JSON.parse(localStorage.getItem('singleTask'))
+    //     const task = singleTask.pk;
+    //     let formData = new FormData();
+    //     formData.append('file', this.state.file);
+    //     formData.append('title', this.state.Filetitle);
+    //     formData.append('task', task);
+
+    //     let url = 'https://ecological.chinikiguard.com/projects/api/task/document/add/';
+
+    //     axios.post(url, formData,
+    //         {
+    //             headers: {
+    //                 'content-type': 'multipart/form-data',
+    //                 'Authorization': `Token ${token}`,
+    //                 'Access-Control-Allow-Origin': '*',
+    //                 'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS',
+    //                 'Access-Control-Allow-Credentials': true
+    //             }
+    //         },
+
+    //         Fileoptions)
+    //         .then(res => {
+    //             console.log(res)
+    //             this.setState({ avatar: res.data.image, uploadFilePercentage: 100 }, () => {
+    //                 setTimeout(() => {
+    //                     this.setState({ uploadFilePercentage: 0 })
+    //                 }, 1000);
+    //             })
+
+    //             this.setState({
+    //                 message: "",
+    //                 successful: false,
+    //                 loadingFile: true
+    //             });
+    //             window.location = "/alltasks"
+    //         })
+    // };
 
     componentDidMount() {
         //check if user is login
         if (!localStorage.getItem('user')) {
 
             return (<Redirect to={'/login'} />)
-          }
+        }
 
         //user  stored user information (including JWT) from AuthService class
         const user = AuthLogin.getCurrentUser();
@@ -528,183 +635,125 @@ export default class EditTaskImage extends Component {
 
                                                     {/*end: Info*/}
                                                 </div>
+                                                <div className="col-xl-6">
+                                                    <div className="form-group fv-plugins-icon-container">
+
+                                                        {showAdministrator && (
+
+                                                            <div className="form-group">
+                                                                <center>
+
+                                                                    <ToastContainer />
+                                                                    <Progress max="100" color="success" value={this.state.loaded} >{Math.round(this.state.loaded, 2)}%</Progress>
+                                                                    <br />
+                                                                    <div className="form-group">
+                                                                        <label className="font-weight-bold mb-2">File Title</label>
+                                                                        <input type="text" class="form-control" onChange={this.handleFileTitleChangeSmart} name="address1"
+                                                                            required />
+                                                                        <br />
+
+                                                                        <input type="file" class="form-control" onChange={this.onChangeHandler} value={this.state.file} name="address1" />
+                                                                        <button type="button" class="btn btn-success btn-block" onClick={this.onClickHandler} >Upload</button>
+                                                                    </div>
+
+                                                                </center>
+
+
+
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                </div>
                                                 <div className="row">
                                                     <div className="col-xl-6">
                                                         {/*begin::Input*/}
                                                         <div className="form-group fv-plugins-icon-container">
-                                                        {showTaskManager && (
+                                                            {showTaskManager && (
 
-                                                            <Form onSubmit={this.handleSubmitImage} ref={c => { this.form = c; }} className="form" id="kt_form">
-                                                                {!this.state.successful && (
-                                                                    <div>
-                                                                        { uploadPercentage > 0 && <ProgressBar now={uploadPercentage} active label={`${uploadPercentage}%`} />}
+                                                                <Form onSubmit={this.handleSubmitImage} ref={c => { this.form = c; }} className="form" id="kt_form">
+                                                                    {!this.state.successful && (
+                                                                        <div>
+                                                                            { uploadPercentage > 0 && <ProgressBar now={uploadPercentage} active label={`${uploadPercentage}%`} />}
 
-                                                                        <div className="form-group">
-                                                                            <label className="font-weight-bold mb-2">Image Title</label>
+                                                                            <div className="form-group">
+                                                                                <label className="font-weight-bold mb-2">Image Title</label>
 
-                                                                            <Input type="text" className="form-control form-control-solid form-control-lg" placeholder='Title' id='title' value={this.state.title} onChange={this.handleChange} required />
-                                                                        </div>
+                                                                                <Input type="text" className="form-control form-control-solid form-control-lg" placeholder='Title' id='title' value={this.state.title} onChange={this.handleChange} required />
+                                                                            </div>
 
-                                                                        <Input type="file"
-                                                                            onChange={this.handleImageChange} required />
+                                                                            <Input type="file"
+                                                                                onChange={this.handleImageChange} required />
 
-                                                                        <center>
-                                                                            <button
-                                                                                type="submit"
-                                                                                enabled={this.state.myloading}
-                                                                                className="btn btn-sm btn-success font-weight-bolder text-uppercase"
-                                                                                id="kt_login_singin_form_submit_button"
-                                                                            // onChange={this.handleSubmitImage}
+                                                                            <center>
+                                                                                <button
+                                                                                    type="submit"
+                                                                                    enabled={this.state.myloading}
+                                                                                    className="btn btn-sm btn-success font-weight-bolder text-uppercase"
+                                                                                    id="kt_login_singin_form_submit_button"
+                                                                                // onChange={this.handleSubmitImage}
 
-                                                                            >
-                                                                                {this.state.myloading && (
-                                                                                    <center><Spinner animation="border" variant="white" /></center>
-                                                                                )}
+                                                                                >
+                                                                                    {this.state.myloading && (
+                                                                                        <center><Spinner animation="border" variant="white" /></center>
+                                                                                    )}
                                                         Submit</button>
-                                                                        </center>
-                                                                        <CheckButton
-                                                                            style={{ display: "none" }}
-                                                                            ref={c => {
-                                                                                this.checkBtn = c;
-                                                                            }}
-                                                                        />
-                                                                    </div>
-                                                                )}
-                                                                {this.state.message && (
-
-                                                                    <div className="pb-5" >
-                                                                        <div
-                                                                            className={
-                                                                                this.state.successful
-                                                                                    ? "alert alert-custom alert-outline-success fade show mb-5"
-                                                                                    : "alert alert-custom alert-outline-danger fade show mb-5"
-                                                                            }
-                                                                            role="alert"
-                                                                        >
-                                                                            {this.state.message}
+                                                                            </center>
+                                                                            <CheckButton
+                                                                                style={{ display: "none" }}
+                                                                                ref={c => {
+                                                                                    this.checkBtn = c;
+                                                                                }}
+                                                                            />
                                                                         </div>
-                                                                    </div>
-                                                                )}
-                                                            </Form>
-                                                        )}
+                                                                    )}
+                                                                    {this.state.message && (
+
+                                                                        <div className="pb-5" >
+                                                                            <div
+                                                                                className={
+                                                                                    this.state.successful
+                                                                                        ? "alert alert-custom alert-outline-success fade show mb-5"
+                                                                                        : "alert alert-custom alert-outline-danger fade show mb-5"
+                                                                                }
+                                                                                role="alert"
+                                                                            >
+                                                                                {this.state.message}
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+                                                                </Form>
+                                                            )}
                                                         </div>
                                                     </div>
 
                                                     <div className="col-xl-6">
                                                         <div className="form-group fv-plugins-icon-container">
 
+                                                            
                                                             {showProjectManager && (
 
-                                                                <Form onSubmit={this.handleSubmitFile} ref={c => { this.form = c; }} className="form" id="kt_form">
-                                                                    {!this.state.successful && (
-                                                                        <div>
-                                                                            { uploadFilePercentage > 0 && <ProgressBar now={uploadFilePercentage} active label={`${uploadFilePercentage}%`} />}
+                                                                <div className="form-group">
+                                                                    <center>
 
-                                                                            <div className="form-group">
-                                                                                <label className="font-weight-bold mb-2">File Title</label>
+                                                                        <ToastContainer />
+                                                                        <Progress max="100" color="success" value={this.state.loaded} >{Math.round(this.state.loaded, 2)}%</Progress>
+                                                                        <br />
+                                                                        <div className="form-group">
+                                                                            <label className="font-weight-bold mb-2">File Title</label>
+                                                                            <input type="text" class="form-control" onChange={this.handleFileTitleChangeSmart} name="address1"
+                                                                                required />
+                                                                            <br />
 
-                                                                                <Input type="text" className="form-control form-control-solid form-control-lg" placeholder='Title' id='title' value={this.state.Filetitle} onChange={this.handleFileTitleChange} required />
-                                                                            </div>
-
-                                                                            <Input type="file"
-                                                                                onChange={this.handleFileChange} required />
-
-                                                                            <center>
-                                                                                <button
-                                                                                    type="submit"
-                                                                                    enabled={this.state.loadingFile}
-                                                                                    className="btn btn-sm btn-success font-weight-bolder text-uppercase"
-                                                                                    id="kt_login_singin_form_submit_button"
-                                                                                // onChange={this.handleSubmitImage}
-
-                                                                                >
-                                                                                    {this.state.loadingFile && (
-                                                                                        <center><Spinner animation="border" variant="white" /></center>
-                                                                                    )}
-    Submit</button>
-                                                                            </center>
-                                                                            <CheckButton
-                                                                                style={{ display: "none" }}
-                                                                                ref={c => {
-                                                                                    this.checkBtn = c;
-                                                                                }}
-                                                                            />
+                                                                            <input type="file" class="form-control" onChange={this.onChangeHandler} value={this.state.file} name="address1" />
+                                                                            <button type="button" class="btn btn-success btn-block" onClick={this.onClickHandler} >Upload</button>
                                                                         </div>
-                                                                    )}
-                                                                    {this.state.message && (
 
-                                                                        <div className="pb-5" >
-                                                                            <div
-                                                                                className={
-                                                                                    this.state.successful
-                                                                                        ? "alert alert-custom alert-outline-success fade show mb-5"
-                                                                                        : "alert alert-custom alert-outline-danger fade show mb-5"
-                                                                                }
-                                                                                role="alert"
-                                                                            >
-                                                                                {this.state.message}
-                                                                            </div>
-                                                                        </div>
-                                                                    )}
-                                                                </Form>
+                                                                    </center>
 
 
-                                                            )}
-                                                            {showAdministrator && (
 
-                                                                <Form onSubmit={this.handleSubmitFile} ref={c => { this.form = c; }} className="form" id="kt_form">
-                                                                    {!this.state.successful && (
-                                                                        <div>
-                                                                            { uploadFilePercentage > 0 && <ProgressBar now={uploadFilePercentage} active label={`${uploadFilePercentage}%`} />}
-
-                                                                            <div className="form-group">
-                                                                                <label className="font-weight-bold mb-2">File Title</label>
-
-                                                                                <Input type="text" className="form-control form-control-solid form-control-lg" placeholder='Title' id='title' value={this.state.Filetitle} onChange={this.handleFileTitleChange} required />
-                                                                            </div>
-
-                                                                            <Input type="file"
-                                                                                onChange={this.handleFileChange} required />
-
-                                                                            <center>
-                                                                                <button
-                                                                                    type="submit"
-                                                                                    enabled={this.state.loadingFile}
-                                                                                    className="btn btn-sm btn-success font-weight-bolder text-uppercase"
-                                                                                    id="kt_login_singin_form_submit_button"
-                                                                                // onChange={this.handleSubmitImage}
-
-                                                                                >
-                                                                                    {this.state.loadingFile && (
-                                                                                        <center><Spinner animation="border" variant="white" /></center>
-                                                                                    )}
-    Submit</button>
-                                                                            </center>
-                                                                            <CheckButton
-                                                                                style={{ display: "none" }}
-                                                                                ref={c => {
-                                                                                    this.checkBtn = c;
-                                                                                }}
-                                                                            />
-                                                                        </div>
-                                                                    )}
-                                                                    {this.state.message && (
-
-                                                                        <div className="pb-5" >
-                                                                            <div
-                                                                                className={
-                                                                                    this.state.successful
-                                                                                        ? "alert alert-custom alert-outline-success fade show mb-5"
-                                                                                        : "alert alert-custom alert-outline-danger fade show mb-5"
-                                                                                }
-                                                                                role="alert"
-                                                                            >
-                                                                                {this.state.message}
-                                                                            </div>
-                                                                        </div>
-                                                                    )}
-                                                                </Form>
-
+                                                                </div>
                                                             )}
 
                                                         </div>
@@ -725,8 +774,8 @@ export default class EditTaskImage extends Component {
                                                         {/*begin::Navi*/}
                                                         <div className="navi navi-hover navi-active navi-link-rounded navi-bold d-flex flex-row">
 
-                                                             {/*begin::Item*/}
-                                                             <div className="navi-item mr-2">
+                                                            {/*begin::Item*/}
+                                                            <div className="navi-item mr-2">
                                                                 <Link to="/EditTask" className="navi-link">
                                                                     <span className="navi-text">Files</span>
                                                                 </Link>
@@ -739,19 +788,19 @@ export default class EditTaskImage extends Component {
                                                                 </Link>
                                                             </div>
                                                             {/*end::Item*/}
-                                                            
-                                                           
+
+
                                                         </div>
                                                         {/*end::Navi*/}
                                                         {/*begin::Dropdown*/}
-                                                        
+
                                                         {/*end::Dropdown*/}
                                                     </div>
                                                     {/*end::Navigation*/}
                                                 </div>
                                                 {/*end::Info*/}
                                                 {/*begin::Users*/}
-                                               
+
                                                 {/*end::Users*/}
                                             </div>
                                             {/*end::Body*/}
