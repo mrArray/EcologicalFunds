@@ -68,7 +68,7 @@ export default class EditTask extends Component {
         //define message container
         let err = []
         // list allow mime type
-        const types = ['image/png', 'image/jpeg', 'image/gif']
+        const types = ['file/pdf', 'file/doc','file/docx','image/png', 'image/jpeg', 'image/gif']
         // loop access array
         for (var x = 0; x < files.length; x++) {
             // compare file type find doesn't matach
@@ -150,13 +150,13 @@ export default class EditTask extends Component {
             .then(res => {
                 // then print response status
                 console.log(res)
-                toast.success('upload success')
+                toast.success('File successfully uploaded')
                 window.location = "/EditTask"
 
             })
             .catch(err => {
                 // then print response status
-                toast.error('upload fail')
+                toast.error('Failed to Upload the File')
             })
     }
 
@@ -287,13 +287,13 @@ export default class EditTask extends Component {
             .then(res => {
                 // then print response status
                 console.log(res)
-                toast.success('upload success')
+                toast.success('Image successfully Uploaded')
                 window.location = "/EditTask"
 
             })
             .catch(err => {
                 // then print response status
-                toast.error('upload fail')
+                toast.error('failed to Upload the Image')
             })
     }
 
