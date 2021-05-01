@@ -86,6 +86,7 @@ const Content = () => {
             <Route exact path="/" component={CompletedProjects} />
             <Route path="/CompletedProjects" component={CompletedProjects} />
 
+         
 
         </Switch>
 
