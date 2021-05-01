@@ -29,11 +29,10 @@ export default class AllTasks extends Component {
 
   componentDidMount() {
 
-    //check if user is login
     if (!localStorage.getItem('user')) {
 
       return (<Redirect to={'/login'} />)
-    }
+  }
     //user  stored user information (including JWT) from AuthService class
     const user = AuthLogin.getCurrentUser();
     //check User Group
