@@ -271,78 +271,112 @@ export default class EditTaskImage extends Component {
         })
     };
     //image Functions
-    handleImageChange = (e) => {
-        this.setState({
-            image: e.target.files[0]
-        })
-    };
-    handleTitleChange = (e) => {
-        this.setState({
-            title: e.target.value
-        })
-    };
-
-    handleSubmitImage = (e) => {
-        e.preventDefault();
-
-        const options = {
-            onUploadProgress: (progressEvent) => {
-                const { loaded, total } = progressEvent;
-                let percent = Math.floor((loaded * 100) / total)
-                console.log(`${loaded}kb of ${total}kb | ${percent}%`);
-
-                if (percent < 100) {
-                    this.setState({ uploadPercentage: percent })
-                }
-            }
+  //image Functions
+  handleImageTitleChangeSmart = (e) => {
+    this.setState({
+        title: e.target.value
+    })
+};
+checkImageMimeType = (event) => {
+    //getting file object
+    let files = event.target.files
+    //define message container
+    let err = []
+    // list allow mime type
+    const types = ['image/png', 'image/jpeg', 'image/gif']
+    // loop access array
+    for (var x = 0; x < files.length; x++) {
+        // compare file type find doesn't matach
+        if (types.every(type => files[x].type !== type)) {
+            // create error message and assign to container   
+            err[x] = files[x].type + ' is not a supported format\n';
         }
-
-
-        this.setState({
-            message: "",
-            successful: false,
-            myloading: true
-        });
-
-        const mytoken = JSON.parse(localStorage.getItem('user'));
-        const token = mytoken.token;
-        const singleTask = JSON.parse(localStorage.getItem('singleTask'))
-        const task = singleTask.pk;
-        let formData = new FormData();
-        formData.append('image', this.state.image);
-        formData.append('title', this.state.title);
-        formData.append('task', task);
-
-        let url = 'https://ecological.chinikiguard.com/projects/api/task/image/add/';
-
-        axios.post(url, formData,
-            {
-                headers: {
-                    'content-type': 'multipart/form-data',
-                    'Authorization': `Token ${token}`,
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS',
-                    'Access-Control-Allow-Credentials': true
-                }
-            },
-
-            options)
-            .then(res => {
-                console.log(res)
-                this.setState({ avatar: res.data.image, uploadPercentage: 100 }, () => {
-                    setTimeout(() => {
-                        this.setState({ uploadPercentage: 0 })
-                    }, 1000);
-                })
-
-                this.setState({
-                    message: "",
-                    successful: false,
-                    myloading: true
-                });
-                window.location = "/alltasks"
-            })
     };
+    for (var z = 0; z < err.length; z++) {// if message not same old that mean has error 
+        // discard selected file
+        toast.error(err[z])
+        event.target.value = null
+    }
+    return true;
+}
+maxSelectImage = (event) => {
+    let files = event.target.files
+    if (files.length > 3) {
+        const msg = 'Only 3 images can be uploaded at a time'
+        event.target.value = null
+        toast.warn(msg)
+        return false;
+    }
+    return true;
+}
+checkImageSize = (event) => {
+    let files = event.target.files
+    let size = 5000000
+    let err = [];
+    for (var x = 0; x < files.length; x++) {
+        if (files[x].size > size) {
+            err[x] = files[x].type + 'is too large, please pick a smaller file\n';
+        }
+    };
+    for (var z = 0; z < err.length; z++) {// if message not same old that mean has error 
+        // discard selected file
+        toast.error(err[z])
+        event.target.value = null
+    }
+    return true;
+}
+onChangeHandlerImage = event => {
+    var files = event.target.files
+    if (this.maxSelectFile(event) && this.checkMimeType(event) && this.checkFileSize(event)) {
+        // if return true allow to setState
+        this.setState({
+            image: files,
+            loaded: 0
+        })
+    }
+}
+onClickHandlerImage = () => {
+
+    const mytoken = JSON.parse(localStorage.getItem('user'));
+    const token = mytoken.token;
+    const singleTask = JSON.parse(localStorage.getItem('singleTask'))
+    const task = singleTask.pk;
+    const data = new FormData()
+
+    for (var x = 0; x < this.state.image.length; x++) {
+        data.append('image', this.state.image[x])
+        data.append('title', this.state.title);
+        data.append('task', task);
+    }
+    axios.post("https://ecological.chinikiguard.com/projects/api/task/image/add/", data, {
+        headers: {
+            'content-type': 'multipart/form-data',
+            'Authorization': `Token ${token}`,
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS',
+            'Access-Control-Allow-Credentials': true
+        },
+        onUploadProgress: ProgressEvent => {
+            this.setState({
+                loaded: (ProgressEvent.loaded / ProgressEvent.total * 100),
+            })
+        },
+    })
+        .then(res => {
+            // then print response status
+            console.log(res)
+            toast.success('upload success')
+            window.location = "/EditTask"
+
+        })
+        .catch(err => {
+            // then print response status
+            toast.error('upload fail')
+        })
+}
+
+//end Image
+
 
     onChangeStatus(e) {
         this.setState({
@@ -666,67 +700,39 @@ export default class EditTaskImage extends Component {
 
                                                 </div>
                                                 <div className="row">
-                                                    <div className="col-xl-6">
+                                                <div className="col-xl-6">
                                                         {/*begin::Input*/}
                                                         <div className="form-group fv-plugins-icon-container">
+
+                                                            {/* for image upload */}
                                                             {showTaskManager && (
 
-                                                                <Form onSubmit={this.handleSubmitImage} ref={c => { this.form = c; }} className="form" id="kt_form">
-                                                                    {!this.state.successful && (
-                                                                        <div>
-                                                                            { uploadPercentage > 0 && <ProgressBar now={uploadPercentage} active label={`${uploadPercentage}%`} />}
 
-                                                                            <div className="form-group">
-                                                                                <label className="font-weight-bold mb-2">Image Title</label>
+                                                            <div className="form-group">
+                                                            <center>
 
-                                                                                <Input type="text" className="form-control form-control-solid form-control-lg" placeholder='Title' id='title' value={this.state.title} onChange={this.handleChange} required />
-                                                                            </div>
+                                                                <ToastContainer />
+                                                                <Progress max="100" color="success" value={this.state.loaded} >{Math.round(this.state.loaded, 2)}%</Progress>
+                                                                <br />
+                                                                <div className="form-group">
+                                                                    <label className="font-weight-bold mb-2">Image Title</label>
+                                                                    <input type="text" class="form-control" onChange={this.handleImageTitleChangeSmart} name="address1"
+                                                                        required />
+                                                                    <br />
 
-                                                                            <Input type="file"
-                                                                                onChange={this.handleImageChange} required />
+                                                                    <input type="file" class="form-control" onChange={this.onChangeHandlerImage} value={this.state.file} name="address1" />
+                                                                    <button type="button" class="btn btn-success btn-block" onClick={this.onClickHandlerImage} >Upload</button>
+                                                                </div>
 
-                                                                            <center>
-                                                                                <button
-                                                                                    type="submit"
-                                                                                    enabled={this.state.myloading}
-                                                                                    className="btn btn-sm btn-success font-weight-bolder text-uppercase"
-                                                                                    id="kt_login_singin_form_submit_button"
-                                                                                // onChange={this.handleSubmitImage}
+                                                            </center>
 
-                                                                                >
-                                                                                    {this.state.myloading && (
-                                                                                        <center><Spinner animation="border" variant="white" /></center>
-                                                                                    )}
-                                                        Submit</button>
-                                                                            </center>
-                                                                            <CheckButton
-                                                                                style={{ display: "none" }}
-                                                                                ref={c => {
-                                                                                    this.checkBtn = c;
-                                                                                }}
-                                                                            />
-                                                                        </div>
-                                                                    )}
-                                                                    {this.state.message && (
 
-                                                                        <div className="pb-5" >
-                                                                            <div
-                                                                                className={
-                                                                                    this.state.successful
-                                                                                        ? "alert alert-custom alert-outline-success fade show mb-5"
-                                                                                        : "alert alert-custom alert-outline-danger fade show mb-5"
-                                                                                }
-                                                                                role="alert"
-                                                                            >
-                                                                                {this.state.message}
-                                                                            </div>
-                                                                        </div>
-                                                                    )}
-                                                                </Form>
-                                                            )}
+
+                                                        </div>
+                                                   
+                                                             )}
                                                         </div>
                                                     </div>
-
                                                     <div className="col-xl-6">
                                                         <div className="form-group fv-plugins-icon-container">
 
